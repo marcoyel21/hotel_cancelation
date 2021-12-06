@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Capitulo 4 Modeling | Proyecto Final: Hotel Cancelation</title>
+  <meta name="description" content="Este es el reporte final del proyecto final sobre el concurso de Kaggle de predicción de cancelación en hoteles." />
+  <meta name="generator" content="bookdown 0.22 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Capitulo 4 Modeling | Proyecto Final: Hotel Cancelation" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="Este es el reporte final del proyecto final sobre el concurso de Kaggle de predicción de cancelación en hoteles." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Capitulo 4 Modeling | Proyecto Final: Hotel Cancelation" />
+  
+  <meta name="twitter:description" content="Este es el reporte final del proyecto final sobre el concurso de Kaggle de predicción de cancelación en hoteles." />
+  
+
+<meta name="author" content="Alex Joel Marco" />
+
+
+<meta name="date" content="2021-12-06" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="preparación-de-los-datos.html"/>
+<link rel="next" href="conclusiones.html"/>
+<script src="libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="libs/jquery-3.5.1/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+<link href="libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="libs/datatables-binding-0.17/datatables.js"></script>
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="libs/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="libs/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
+<script src="libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">A Minimal Book Example</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introducción</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#proyecto"><i class="fa fa-check"></i><b>1.1</b> Proyecto</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#descripción-del-problema"><i class="fa fa-check"></i><b>1.2</b> Descripción del problema</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#objetivo"><i class="fa fa-check"></i><b>1.3</b> Objetivo</a></li>
+<li class="chapter" data-level="1.4" data-path="index.html"><a href="index.html#fuente-de-datos"><i class="fa fa-check"></i><b>1.4</b> Fuente de datos</a></li>
+<li class="chapter" data-level="1.5" data-path="index.html"><a href="index.html#ambiente"><i class="fa fa-check"></i><b>1.5</b> Ambiente</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="análisis-exploratorio-de-datos.html"><a href="análisis-exploratorio-de-datos.html"><i class="fa fa-check"></i><b>2</b> Análisis Exploratorio de Datos</a>
+<ul>
+<li class="chapter" data-level="2.0.1" data-path="análisis-exploratorio-de-datos.html"><a href="análisis-exploratorio-de-datos.html#cancelaciones-eda"><i class="fa fa-check"></i><b>2.0.1</b> Cancelaciones EDA</a></li>
+<li class="chapter" data-level="2.0.2" data-path="análisis-exploratorio-de-datos.html"><a href="análisis-exploratorio-de-datos.html#análisis-de-tendenciás-en-el-tiempo-eda"><i class="fa fa-check"></i><b>2.0.2</b> Análisis de tendenciás en el tiempo EDA</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="preparación-de-los-datos.html"><a href="preparación-de-los-datos.html"><i class="fa fa-check"></i><b>3</b> Preparación de los Datos</a>
+<ul>
+<li class="chapter" data-level="3.0.1" data-path="preparación-de-los-datos.html"><a href="preparación-de-los-datos.html#preprocesamiento"><i class="fa fa-check"></i><b>3.0.1</b> Preprocesamiento</a></li>
+<li class="chapter" data-level="3.0.2" data-path="preparación-de-los-datos.html"><a href="preparación-de-los-datos.html#ingeniería-de-caracterísitcas"><i class="fa fa-check"></i><b>3.0.2</b> Ingeniería de caracterísitcas</a></li>
+<li class="chapter" data-level="3.1" data-path="preparación-de-los-datos.html"><a href="preparación-de-los-datos.html#cv"><i class="fa fa-check"></i><b>3.1</b> CV</a></li>
+<li class="chapter" data-level="3.2" data-path="preparación-de-los-datos.html"><a href="preparación-de-los-datos.html#nivelación-de-variables"><i class="fa fa-check"></i><b>3.2</b> Nivelación de variables</a></li>
+<li class="chapter" data-level="3.3" data-path="preparación-de-los-datos.html"><a href="preparación-de-los-datos.html#matrices-ralas"><i class="fa fa-check"></i><b>3.3</b> Matrices RALAS</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="modeling.html"><a href="modeling.html"><i class="fa fa-check"></i><b>4</b> Modeling</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="modeling.html"><a href="modeling.html#cross-validated-lasso-logit"><i class="fa fa-check"></i><b>4.1</b> Cross-Validated LASSO-logit</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="modeling.html"><a href="modeling.html#grafica-lasso-de-los-coeficientes-vs-la-complejidad-del-modelo."><i class="fa fa-check"></i><b>4.1.1</b> Grafica Lasso de los coeficientes vs la complejidad del modelo.</a></li>
+<li class="chapter" data-level="4.1.2" data-path="modeling.html"><a href="modeling.html#hiper-parametro"><i class="fa fa-check"></i><b>4.1.2</b> Hiper parametro</a></li>
+<li class="chapter" data-level="4.1.3" data-path="modeling.html"><a href="modeling.html#variables"><i class="fa fa-check"></i><b>4.1.3</b> Variables</a></li>
+<li class="chapter" data-level="4.1.4" data-path="modeling.html"><a href="modeling.html#log-loss-test-oos"><i class="fa fa-check"></i><b>4.1.4</b> LOG LOSS test OOS</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="modeling.html"><a href="modeling.html#xgboosting"><i class="fa fa-check"></i><b>4.2</b> XGBOOSTING</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="conclusiones.html"><a href="conclusiones.html"><i class="fa fa-check"></i><b>5</b> Conclusiones</a></li>
+<li class="chapter" data-level="6" data-path="referencias.html"><a href="referencias.html"><i class="fa fa-check"></i><b>6</b> Referencias</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Proyecto Final: Hotel Cancelation</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="modeling" class="section level1" number="4">
+<h1><span class="header-section-number">Capitulo 4</span> Modeling</h1>
+<p>En esta parte aplicaremos dos modelos: un Lasso-Logit y un XGboosting.</p>
+<div id="cross-validated-lasso-logit" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Cross-Validated LASSO-logit</h2>
+<p>Seestima un cross validated LASSO y se muestra el la gráfica de CV Binomial Deviance vs Complejidad</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="modeling.html#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#CV LASSO</span></span>
+<span id="cb7-2"><a href="modeling.html#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># se hacen 5 folds </span></span>
+<span id="cb7-3"><a href="modeling.html#cb7-3" aria-hidden="true" tabindex="-1"></a>cvlasso_a<span class="ot">&lt;-</span><span class="fu">cv.gamlr</span>(<span class="at">x =</span> Xa, <span class="at">y =</span> Ya, <span class="at">verb =</span> T, <span class="at">family =</span> <span class="st">&#39;binomial&#39;</span>, <span class="at">nfold =</span> <span class="dv">5</span>)</span></code></pre></div>
+<pre><code>## Warning in gamlr(x, y, ...): numerically perfect fit for some observations.</code></pre>
+<pre><code>## fold 1,2,3,4,5,done.</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="modeling.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Grafica</span></span>
+<span id="cb10-2"><a href="modeling.html#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cvlasso_a)</span></code></pre></div>
+<p><img src="final_bookdown_files/figure-html/unnamed-chunk-22-1.png" width="672" /></p>
+<div id="grafica-lasso-de-los-coeficientes-vs-la-complejidad-del-modelo." class="section level3" number="4.1.1">
+<h3><span class="header-section-number">4.1.1</span> Grafica Lasso de los coeficientes vs la complejidad del modelo.</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="modeling.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(cvlasso_a<span class="sc">$</span>gamlr)</span></code></pre></div>
+<p><img src="final_bookdown_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+</div>
+<div id="hiper-parametro" class="section level3" number="4.1.2">
+<h3><span class="header-section-number">4.1.2</span> Hiper parametro</h3>
+<p>Automaticamente se elige el lambda que minimiza la devianza OOS.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="modeling.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identificador para el lambda deseado</span></span>
+<span id="cb12-2"><a href="modeling.html#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Valor del lambda deseado</span></span>
+<span id="cb12-3"><a href="modeling.html#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#lambda resultante</span></span>
+<span id="cb12-4"><a href="modeling.html#cb12-4" aria-hidden="true" tabindex="-1"></a>a_lambda<span class="ot">&lt;-</span> <span class="fu">colnames</span>(<span class="fu">coef</span>(cvlasso_a, <span class="at">select=</span><span class="st">&quot;min&quot;</span>))</span>
+<span id="cb12-5"><a href="modeling.html#cb12-5" aria-hidden="true" tabindex="-1"></a>cvlasso_a<span class="sc">$</span>gamlr<span class="sc">$</span>lambda[a_lambda]</span></code></pre></div>
+<pre><code>##     seg100 
+## 0.00243361</code></pre>
+</div>
+<div id="variables" class="section level3" number="4.1.3">
+<h3><span class="header-section-number">4.1.3</span> Variables</h3>
+<p>A continuacion una tabla con los coeficientes que se selecciona para el CV LASSO. Que sorprendentemente solo fueron 561.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="modeling.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DT)</span>
+<span id="cb14-2"><a href="modeling.html#cb14-2" aria-hidden="true" tabindex="-1"></a>coefs<span class="ot">&lt;-</span><span class="fu">coef</span>(cvlasso_a, <span class="at">select=</span><span class="st">&quot;min&quot;</span>, <span class="at">k=</span><span class="dv">2</span>, <span class="at">corrected=</span><span class="cn">TRUE</span>)</span>
+<span id="cb14-3"><a href="modeling.html#cb14-3" aria-hidden="true" tabindex="-1"></a>coefs<span class="ot">&lt;-</span><span class="fu">as.data.frame</span>(coefs[,<span class="dv">1</span>])</span>
+<span id="cb14-4"><a href="modeling.html#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(coefs)<span class="ot">&lt;-</span><span class="st">&quot;valor&quot;</span></span>
+<span id="cb14-5"><a href="modeling.html#cb14-5" aria-hidden="true" tabindex="-1"></a>coefs<span class="ot">&lt;-</span>coefs <span class="sc">%&gt;%</span> <span class="fu">filter</span>(valor <span class="sc">!=</span><span class="dv">0</span>)</span>
+<span id="cb14-6"><a href="modeling.html#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="fu">datatable</span>(coefs<span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(valor)))</span></code></pre></div>
+<div id="htmlwidget-f6004cb430b60552dd33" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-f6004cb430b60552dd33">{"x":{"filter":"none","data":[["tasa_canc","reserved_room_typeP","cust_depostiTransient_B","company321","distribution_channel5","agent214","agent341","country_monthBLR_January","deposit_typeB","country_monthOMN_January","agent17","country_monthSVN_March","agent390","company77","agent_companyNULL_281","country_monthTHA_February","countryARE","weekdaymonthAugust_33_14","countryPRT","company38","countryHKG","countryIDN","countryMAC","countryAGO","company392","country_monthTZA_September","country_monthLUX_December","company110","countryNGA","country_monthMDV_November","agent134","company478","country_monthKEN_March","meal_reservSC_G","country_monthPER_November","weekdaymonthFebruary_10_28","agent_company9_NULL","countrySAU","country_monthLUX_November","agent281","country_monthNGA_March","week_diasem45_sabado","country_monthLUX_February","country_monthSAU_February","country_monthAGO_February","country_monthAUT_October","agent118","countryBGD","lead_depositA_[ 16, 59)","lead_week4_[146,737]","country_monthMOZ_June","countryGEO","country_monthGIB_March","company316","country_monthAND_January","country_monthGIB_August","country_monthZAF_October","countryJEY","country_monthKAZ_January","company416","lead_depositA_[ 59,146)","lead_week24_[ 16, 59)","lead_week42_[ 59,146)","agent_company240_NULL","country_monthVEN_September","company204","country_monthLBN_August","country_monthCOL_November","country_monthIRN_October","agent13","countryCHN","country_monthAUS_February","agent56","countryZAF","lead_week53_[146,737]","country_monthSGP_January","country_monthPRT_September","countryMDV","country_monthITA_July","lead_week52_[146,737]","countryTJK","cust_segmentTransient_7","agent9","daymontDecember_6","company277","country_monthBGR_May","country_monthQAT_April","weekdaymonthNovember_49_27","country_monthHUN_November","lead_week3_[146,737]","country_monthKOR_June","agent107","lead_week50_[ 59,146)","agent240","country_monthMLT_August","lead_week6_[146,737]","agent410","country_monthQAT_June","country_monthPRT_October","country_monthTMP_December","lead_depositA_[146,737]","country_monthZMB_April","agent291","market_segment8","lead_week43_[ 59,146)","countryBRA","country_monthISR_July","agent94","country_monthCZE_July","country_monthCHN_October","country_monthIRN_March","agent332","weekdaymonthNovember_48_20","daymontNovember_23","countryPAK","country_monthVEN_January","country_monthCHL_April","countryCPV","lead_depositB_[ 59,146)","agent110","lead_week2_[ 59,146)","lead_week48_[ 59,146)","agent191","agent315","lead_week6_[ 59,146)","country_monthESP_April","country_monthIRL_October","country_monthTHA_October","company253","lead_week32_[ 16, 59)","daymontMay_15","country_monthCHL_December","agent_company242_NULL","country_monthTUR_July","countryQAT","country_monthTUR_January","country_monthPRT_August","week_diasem40_sabado","company470","country_monthCZE_October","country_monthTUR_February","country_monthBEL_October","country_monthTUN_March","meal_reservSC_P","agent14","daymontOctober_27","company102","country_monthCOL_September","countryTUR","agent262","meal_reservFB_A","country_monthRUS_March","country_monthHUN_August","weekdaymonthOctober_43_17","weekdaymonthSeptember_36_5","lead_week51_[146,737]","agent38","lead_week40_[ 59,146)","lead_week2_[146,737]","company218","daymontJune_8","countryRUS","country_monthAGO_December","daymontNovember_12","countryMAR","country_monthCHN_July","country_monthEGY_November","lead_week49_[146,737]","month_diasemOctober_sabado","countryHND","daymontOctober_26","company68","agent155","lead_week44_[146,737]","countryESP","country_monthPER_March","countryITA","companyNULL","country_monthPRT_May","weekdaymonthMarch_11_14","lead_week45_[ 59,146)","company309","country_monthGEO_March","agent234","company153","weekdaymonthSeptember_37_4","countryGLP","agent440","weekdaymonthJanuary_1_6","weekdaymonthDecember_53_26","daymontJuly_7","daymontDecember_16","daymontJuly_2","country_monthHRV_March","lead_week3_[ 59,146)","daymontJuly_16","country_monthPRT_November","daymontOctober_13","lead_week49_[ 59,146)","arrival_date_year2017","country_monthMAR_December","week_diasem29_sabado","company112","lead_week50_[ 16, 59)","country_monthAUT_March","week_diasem33_sabado","agent_company341_NULL","company350","weekdaymonthOctober_42_9","daymontJuly_27","lead_week42_[ 16, 59)","country_monthESP_December","lead_week35_[ 16, 59)","week_diasem41_martes","adults","lead_week52_[ 59,146)","country_monthEGY_March","assigned_room_typeB","country_monthKWT_December","country_monthMAR_August","customer_typeTransient","agent_company281_NULL","countrySEN","agent_companyNULL_38","week_diasem37_jueves","lead_week39_[ 59,146)","agent_companyNULL_110","agent_company56_NULL","weekdaymonthJuly_27_3","lead_week37_[ 59,146)","lead_week10_[146,737]","lead_week5_[ 59,146)","company461","week_diasem31_lunes","lead_week1_[ 59,146)","company405","country_monthESP_June","country_monthGBR_November","agent242","country_monthBRA_April","country_monthDEU_December","agent_companyNULL_277","agent_company191_NULL","countryKOR","agent_company134_NULL","lead_week44_[ 59,146)","agent_company17_NULL","stays_in_week_nights","arrival_date_day_of_month22","daymontAugust_18","week_diasem39_sabado","arrival_date_monthDecember","agent_companyNULL_478","agent_company315_NULL","agent_company440_NULL","lead_week8_[146,737]","agent_companyNULL_392","agent_company13_NULL","agent8","daymontMay_27","dia_semviernes","stays_in_weekend_nights","lead_week22_[ 59,146)","daymontDecember_5","daymontNovember_28","agent_company94_NULL","meal_reservSC_A","agent_company234_NULL","agent86","daymontOctober_22","company270","week_diasem51_viernes","lead_week31_[ 16, 59)","agent_companyNULL_77","agent_companyNULL_204","country_monthHND_February","weekmonthNovember_49","agent_companyNULL_416","agent_company262_NULL","country_monthITA_April","agent_company332_NULL","reserved_room_typeE","agent_companyNULL_153","agent_company8_NULL","agent_companyNULL_218","agent_company155_NULL","lead_week34_[146,737]","agent_company38_NULL","countryGAB","country_monthAUS_January","agent_companyNULL_253","week_diasem5_viernes","country_monthFRA_January","weekmonthSeptember_40","agent_company107_NULL","lead_week2_[ 16, 59)","agent_companyNULL_68","agent_company118_NULL","agent_companyNULL_102","agent_company214_NULL","agent_companyNULL_316","agent_companyNULL_470","agent_companyNULL_309","lead_week21_[  0, 16)","lead_week1_[146,737]","agent_companyNULL_350","agent_companyNULL_321","country_monthROU_February","weekdaymonthFebruary_8_24","country_monthFRA_September","daymontOctober_8","week_diasem49_viernes","agent_companyNULL_112","agent_companyNULL_270","country_monthESP_July","agent_company410_NULL","agent_company390_NULL","agent_companyNULL_461","agent_company291_NULL","pascua_m1","agent_company86_NULL","month_diasemDecember_lunes","weekdaymonthOctober_42_13","weekdaymonthJune_24_8","weekdaymonthNovember_49_28","weekdaymonthNovember_48_23","weekdaymonthMay_21_15","agent_company110_NULL","lead_time","weekdaymonthNovember_46_12","weekdaymonthOctober_44_26","weekdaymonthOctober_44_27","weekdaymonthJuly_29_16","month_diasemDecember_viernes","country_monthGAB_September","weekdaymonthDecember_51_16","weekdaymonthDecember_49_5","weekdaymonthDecember_50_6","assigned_room_typeP","weekdaymonthJuly_27_2","weekdaymonthJuly_28_7","lead_week17_[146,737]","weekdaymonthJuly_31_27","country_monthTJK_May","weekdaymonthMay_22_27","weekdaymonthAugust_34_18","weekdaymonthOctober_43_22","agent_company21_NULL","market_dist8_5","adr","weekdaymonthOctober_41_8","week_diasem22_viernes","week_diasem21_domingo","week_diasem24_miercoles","weekdaymonthJuly_28_5","weekdaymonthJuly_31_29","weekdaymonthJune_26_21","weekdaymonthJune_24_10","weekdaymonthJune_27_26","weekdaymonthJuly_30_23","weekdaymonthJuly_27_1","weekdaymonthJuly_29_15","weekdaymonthMay_22_25","weekdaymonthDecember_49_3","weekdaymonthOctober_42_14","weekdaymonthMay_22_26","weekdaymonthOctober_44_25","weekdaymonthOctober_42_12","weekdaymonthApril_15_6","weekdaymonthApril_15_5","week_diasem22_jueves","week_diasem15_lunes","weekmonthMay_19","week_diasem15_martes","weekdaymonthApril_15_4","week_diasem22_miercoles","week_diasem15_miercoles","daymontJuly_15","week_diasem27_domingo","agent_company152_NULL","week_diasem26_martes","week_diasem24_viernes","countrySWE","arrival_date_monthJune","meal_reservSC_D","week_diasem31_viernes","daymontDecember_18","agent_company32_NULL","arrival_date_week_number19","dia_semmiercoles","agent_company11_NULL","country_monthARE_January","country_monthDEU_October","daymontJuly_1","country_monthBEL_July","agent_company151_NULL","agent_company314_NULL","company39","country_monthAUS_April","country_monthGBR_May","country_monthKAZ_July","lead_week45_[ 16, 59)","company154","country_monthNLD_February","weekdaymonthOctober_42_17","country_monthJPN_December","agent251","agent75","company410","assigned_room_typeI","company40","mealHB","daymontDecember_3","country_monthIRL_June","month_diasemJuly_miercoles","country_monthLUX_October","weekdaymonthOctober_43_23","lead_week18_[ 59,146)","lead_week48_[  0, 16)","weekmonthFebruary_9","lead_week32_[ 59,146)","month_diasemFebruary_sabado","lead_week12_[ 59,146)","week_diasem36_jueves","country_monthSWE_September","lead_week24_[ 59,146)","lead_week29_[146,737]","month_diasemMay_jueves","company72","weekdaymonthMarch_9_1","country_monthEGY_February","country_monthCYP_August","week_diasem48_viernes","daymontJuly_29","daymontApril_5","cust_segmentContract_7","country_monthFRA_June","agent10","lead_week3_[  0, 16)","country_monthCYP_May","month_diasemApril_lunes","agent6","arrival_date_week_number9","week_diasem5_sabado","week_diasem47_miercoles","lead_week5_[  0, 16)","daymontJuly_23","daymontJuly_17","weekdaymonthOctober_41_9","daymontOctober_14","daymontJune_26","country_monthCHE_March","countrySRB","weekmonthJune_27","country_monthFRA_March","country_monthMAR_February","lead_week44_[  0, 16)","country_monthFRA_April","agent359","agent314","lead_week9_[  0, 16)","agent157","meal_reservHB_G","agent241","countryGBR","countryIRL","countryPOL","agent22","agent220","weekdaymonthAugust_35_29","countryCYP","country_monthAUT_July","countryNOR","agent16","daymontJune_21","countryAUT","month_diasemMarch_domingo","daymontOctober_12","daymontJuly_5","week_diasem29_viernes","country_monthGBR_June","lead_week15_[ 16, 59)","country_monthMYS_December","week_diasem12_lunes","countryFIN","weekdaymonthMarch_11_10","country_monthPRT_January","country_monthIRL_July","lead_week8_[  0, 16)","countryJPN","meal_reservUndefined_D","agent27","countryFRA","daymontMay_25","country_monthSWE_March","company51","weekdaymonthJanuary_2_6","lead_week6_[  0, 16)","agent168","country_monthFRA_May","lead_week2_[  0, 16)","booking_changes","daymontMarch_29","country_monthGBR_October","week_diasem27_miercoles","country_monthBEL_August","country_monthCHE_July","countryBEL","country_monthIRN_February","week_diasem1_sabado","agent243","week_diasem38_martes","singles_adults","agent32","weekdaymonthJuly_28_11","daymontJuly_10","country_monthFRA_November","agent151","lead_week22_[146,737]","lead_week42_[  0, 16)","week_diasem28_sabado","countryNLD","lead_week50_[  0, 16)","company242","market_distOfflineTA_TO_TA_TO","daymontJune_10","country_monthSVK_August","country_monthSWE_February","agent7","agent26","country_monthDEU_April","agent23","country_monthCZE_August","countryDEU","daymontApril_4","week_diasem44_domingo","daymontOctober_25","lead_week32_[  0, 16)","weekdaymonthOctober_40_2","country_monthSWE_December","weekdaymonthNovember_48_27","market_dist3_TA_TO","meal_reservSC_F","daymontMay_26","agent215","mealUndefined","daymontApril_6","daymontFebruary_8","country_monthIRL_May","agent40","arrival_date_year2015","agent11","country_monthNOR_July","total_of_special_requests","company504","agent152","agent63","cust_segmentTransient-Party_7","agent308","agent89","is_repeated_guest","agent132","countryPAN","agent288","dif_room","intercept","required_car_parking_spaces"],[4.41603631650668,3.43422797992127,2.82502509546209,2.80979312906832,2.78741468026629,2.57570982569015,2.57452691034916,2.49464481118102,2.42841545990338,2.29696890444296,2.23216504679222,2.19437997690707,2.05167912541231,1.89472188049971,1.78994565727785,1.76440057352571,1.75501042571398,1.73414407572602,1.69451815656384,1.63596418414094,1.60887346173576,1.58542582064288,1.51812755854353,1.48039083683307,1.39028804812673,1.36551866087732,1.35520807740368,1.2914636546393,1.23794332676467,1.13782905430774,1.12748024005574,1.1272165362685,1.11642561425716,1.10265645093183,1.09532501506522,1.00302345238417,0.994785550776322,0.994013104474956,0.971272574023039,0.960585431699668,0.927708627746171,0.920650073394086,0.898443951960426,0.887716883724115,0.887485881021022,0.877044206143988,0.872017654045741,0.856289924157036,0.846190430626129,0.844852714147011,0.843179424519452,0.829388199168463,0.82225408494165,0.818312184211428,0.801608191465868,0.795726829721009,0.793353899930335,0.787321625387562,0.779993612832854,0.778667771891527,0.774549141951777,0.772484057418188,0.768649872692142,0.748588055703254,0.692672486688037,0.691457957879946,0.68489338991486,0.684490007361571,0.681879124391446,0.642951864781001,0.63879552083609,0.637887465317131,0.635955062922658,0.604326209718255,0.570619708394357,0.565299045905243,0.562622783130922,0.551800804428319,0.548624570928288,0.547969864976873,0.546587746016611,0.545710406262352,0.544999302935838,0.539725406627103,0.535853949010033,0.534042581050367,0.530298822923122,0.524577217025241,0.521092019161675,0.519408016823146,0.515357671451703,0.504110631268329,0.497935311174474,0.495620280894833,0.494154875014369,0.490838041280491,0.485362182105884,0.475662271480631,0.469527900841125,0.461492625808723,0.448245931207818,0.442785525233959,0.438760279184918,0.437829831350564,0.437360188632791,0.434180510362678,0.430987804335986,0.42787486218047,0.426840782304878,0.420579710110956,0.41870472502286,0.415965728075213,0.41316868139354,0.404504835920545,0.401540306882507,0.397089085695533,0.38902183625364,0.387369980418927,0.386687892741576,0.384086264961466,0.381701439463095,0.379888608399565,0.378812640385145,0.373667833246492,0.35909868118512,0.357406311956883,0.356375744436984,0.352766671820577,0.350650657346126,0.349092680974592,0.34543593938112,0.344356926729233,0.343895794999621,0.339926987952674,0.339600453069468,0.339174494893208,0.339093875787036,0.337483755866372,0.330151872293166,0.320410197904603,0.31986756436741,0.317147646512635,0.314085240187239,0.308215872661494,0.304435153999858,0.304147449418903,0.284188413544486,0.282928804579058,0.279544903937842,0.270583983859667,0.270108219414954,0.262923153704988,0.260300127183124,0.259923785343725,0.259864869868103,0.257194447778916,0.249134362336237,0.248681986002808,0.245741162931226,0.242574544500161,0.241751499229188,0.239997610580358,0.237964948465193,0.237844674493413,0.237178312206418,0.233848516667136,0.233790987430206,0.233089175707371,0.228649570555697,0.226885829585558,0.225456387500547,0.222589821262801,0.219538504764955,0.217021092125253,0.21479786922701,0.210644797629417,0.208225470068662,0.201093470097997,0.195100294952336,0.193392177644144,0.193017110845155,0.189153484663031,0.18869850386812,0.188156124426355,0.187258480453377,0.187093858807307,0.186458339446239,0.178376524046357,0.177952323073472,0.177329964488159,0.17123518171046,0.166225472225537,0.165914507830337,0.160066394465517,0.159274641440048,0.157964989142106,0.144748320514258,0.142549865875316,0.133247729843516,0.12746849479417,0.122452147768309,0.122098613124158,0.121811406235997,0.118946364827702,0.118881542276228,0.113556245581826,0.109026936268001,0.104796306096346,0.104073127581344,0.102911102094017,0.102716064830744,0.0991501681088561,0.0947739415333151,0.0942487224732915,0.0934225339834086,0.0925172266013298,0.0900448362385494,0.0879973836508383,0.0850027405891033,0.0837850183660034,0.0830674664380434,0.0828304785741606,0.0826772201822148,0.0819400192309602,0.0815514537975496,0.0804315640539158,0.0800538002370641,0.0799181778453935,0.0797507131185849,0.0782246386698324,0.0780988078283748,0.0779444061286872,0.0775178250537021,0.0775020143157066,0.0774437188774925,0.0730763127810868,0.0728417814333212,0.0711892516541721,0.0688949788647698,0.0688162189941393,0.0684450476594804,0.0679263973561684,0.0678565437057822,0.0669274893325773,0.0638874527013501,0.0631536304753202,0.0630054103765539,0.0618969734431528,0.0613313797263392,0.060090786578717,0.059827500773373,0.0598223459139828,0.058209716620099,0.0573781543103277,0.0565556581329308,0.0565403900031062,0.0522886045633782,0.0522837737093392,0.0478440698785575,0.046319098307522,0.0461361883227188,0.0455287588136702,0.0430237732133024,0.0408124649350273,0.0403354410944181,0.0400784479678833,0.0347809193827561,0.0345929474196546,0.0322207811258921,0.0316362669998113,0.0304582726236132,0.0303105230201458,0.0283842146681102,0.0282449882086559,0.0275397179274247,0.0268104721622168,0.0256561267053746,0.0249868344878786,0.0248099912274916,0.0235211535839103,0.0233820333833259,0.0232985249601914,0.023037088069419,0.0227762825467777,0.0223400115011922,0.0209626257128758,0.0200602581620738,0.0193742139120012,0.0189703090796597,0.0186591953649263,0.0180754490897909,0.0179307268447327,0.0155366538538632,0.0145643996830319,0.01443215705591,0.014309236686577,0.0136575646040454,0.0134286544859512,0.0133669868770773,0.0127264375527813,0.0125747807859227,0.0123644239076841,0.0111187759676384,0.0105066404802233,0.0102165493444783,0.0100181001161769,0.00997922221060661,0.00969149111164297,0.00965072360612302,0.00961806893723743,0.00871323965746534,0.00865964893475269,0.00844808833463083,0.00802008053525644,0.00794698808565332,0.00788165676969428,0.0077807644737692,0.00733398015140057,0.00724750359174206,0.00698823517215773,0.00642641098197688,0.00632890550357864,0.00562472740799596,0.00559093086289157,0.00555920699555358,0.00480946396858759,0.00442415992371658,0.00408937829640114,0.00351230885562382,0.00316248196235925,0.00285030544607584,0.00281751809873057,0.00247607694540153,0.00212604155582733,0.0019103194493535,0.00187605124499888,0.0018697272544505,0.00168727676676081,0.00161675248384272,0.00140190295831932,0.00119101458648682,0.00115018583554184,0.0010036187806773,0.000696169488947426,0.000680832758633343,0.000554214985503757,0.000371665210748062,0.000304618906952604,0.000211878281274233,0.000210186908173364,3.22192082253756e-05,3.070948109041e-05,3.06721132782367e-05,2.75484702156562e-05,-7.81289424878056e-06,-7.84697135012848e-06,-8.84312431027714e-06,-8.87458503307685e-06,-8.99392401496473e-06,-9.32790345846936e-06,-1.06121649344087e-05,-1.093520229484e-05,-1.19119357569251e-05,-1.2341133858087e-05,-1.36159719356716e-05,-1.39091479971163e-05,-1.59349244363922e-05,-1.6430809261436e-05,-1.66313337493988e-05,-1.75782527227568e-05,-4.19441905378274e-05,-5.5313973669226e-05,-0.000224693089173694,-0.000959980441424786,-0.00107461847476677,-0.00110668165013136,-0.00123997889476763,-0.00124222223271406,-0.00127188747671858,-0.00138002673591981,-0.00139306169269573,-0.0016061463777102,-0.00236472516812411,-0.00245609964679711,-0.00341801342002348,-0.00519002085332953,-0.00523350315496202,-0.00591651042704877,-0.00786186965841104,-0.00820630416152053,-0.00846885887005831,-0.0115275688166592,-0.0123289519971832,-0.0150060380163563,-0.0158575271270036,-0.0170775794668734,-0.0196457379377918,-0.0201496724628786,-0.0204992820764848,-0.0212710893342128,-0.0219706212232758,-0.0226697876616515,-0.0227280622610093,-0.0236018786895422,-0.0248646088579936,-0.0256486979664413,-0.0267981078324379,-0.027413948802184,-0.0283803473072906,-0.0306945580372108,-0.0321786286707524,-0.0326753326555638,-0.0342007682122706,-0.0346700177572608,-0.035897876574784,-0.0400804158267489,-0.0405914673653598,-0.0417358058847983,-0.0429188447936831,-0.0431912480807162,-0.0445203080887552,-0.0452403860978364,-0.0469172446784551,-0.0472869643996779,-0.0473017250572415,-0.0477412876292169,-0.04958135543498,-0.0543584034528235,-0.0604401478495789,-0.0607590866464532,-0.0609117456432488,-0.0611268188241127,-0.0637193781975056,-0.0638486542306936,-0.0668254685330553,-0.0677227356827416,-0.0694855162835959,-0.0700636601501537,-0.0706235525757934,-0.0707732976231481,-0.0716091161878138,-0.0718846889505187,-0.0724947073485475,-0.0759396082776438,-0.0778434863829521,-0.0783724645448775,-0.0802985772920597,-0.0806864834182602,-0.0830283959157837,-0.0865845828561661,-0.0867397628844487,-0.0942579564510636,-0.0987220814356041,-0.101403434638438,-0.10175194720345,-0.102305480637112,-0.102566686198083,-0.102983981164358,-0.10909301400994,-0.110773630913861,-0.120234996832316,-0.120290176300979,-0.12428042603451,-0.125046217198938,-0.128053270957419,-0.128744469174574,-0.129158747078165,-0.130702160959063,-0.13354757654331,-0.137097686622978,-0.138582763593442,-0.14645630189189,-0.146474962424826,-0.146764851710864,-0.151150488229305,-0.152436062834934,-0.155549198933499,-0.156869132867232,-0.157306323305088,-0.1573760297757,-0.160640405634771,-0.160864767385039,-0.167527303305418,-0.175626150477204,-0.178337288296218,-0.190051678160106,-0.190519563744541,-0.192874197941068,-0.194591697636027,-0.196173708999845,-0.209642350588797,-0.215970687399972,-0.218560089620183,-0.221729485451973,-0.222259576688019,-0.222693073521838,-0.226512576065192,-0.230251479545533,-0.235769268319582,-0.239333335685811,-0.246000562266227,-0.249980096722594,-0.251901839992286,-0.256223749220054,-0.266293211320606,-0.268154828115605,-0.270631265521348,-0.278324223164063,-0.28043679078638,-0.286940624018507,-0.287227355567506,-0.287649359780344,-0.294504462218668,-0.296046853382053,-0.297897520244628,-0.299297202144209,-0.301463678257156,-0.310043471623748,-0.315340506743848,-0.319530982837197,-0.323232037429119,-0.328116310437665,-0.328939119205252,-0.335243439509947,-0.336318451938507,-0.339639546831439,-0.342843916766588,-0.344326108654937,-0.35240562452299,-0.359602041784728,-0.362035501912726,-0.368772769276037,-0.376363142083653,-0.384462433293556,-0.385738303327923,-0.39174914553015,-0.403111284864009,-0.409944618712624,-0.431413284759114,-0.448880398177635,-0.454672377760418,-0.464411879617749,-0.485362608647568,-0.504258095745214,-0.506220521679675,-0.557443565518768,-0.590477455022717,-0.627797057437604,-0.662950986068478,-0.692585572007789,-0.724762084531964,-0.766439538166725,-0.768821720674583,-0.805118882952697,-0.807958095588941,-0.8141482185302,-0.853403563391494,-0.870230364147861,-0.876726194701676,-0.899440928011535,-1.01200975110224,-1.02279803804669,-1.12179179729368,-1.23840214228144,-1.66178723422972,-3.09197884875414,-3.86629439604712]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>valor<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":1},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="log-loss-test-oos" class="section level3" number="4.1.4">
+<h3><span class="header-section-number">4.1.4</span> LOG LOSS test OOS</h3>
+<p>Ahora pruebo el error log loss del lasso</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="modeling.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Predicciones</span></span>
+<span id="cb15-2"><a href="modeling.html#cb15-2" aria-hidden="true" tabindex="-1"></a>lasso_score <span class="ot">&lt;-</span> <span class="fu">predict</span>(cvlasso_a,</span>
+<span id="cb15-3"><a href="modeling.html#cb15-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">newdata =</span> Xb,</span>
+<span id="cb15-4"><a href="modeling.html#cb15-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">type=</span><span class="st">&quot;response&quot;</span>,</span>
+<span id="cb15-5"><a href="modeling.html#cb15-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">select =</span> <span class="st">&quot;min&quot;</span> )</span>
+<span id="cb15-6"><a href="modeling.html#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="modeling.html#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="modeling.html#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">#dataframe</span></span>
+<span id="cb15-9"><a href="modeling.html#cb15-9" aria-hidden="true" tabindex="-1"></a>lasso_validation <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(y, lasso_score)</span>
+<span id="cb15-10"><a href="modeling.html#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(lasso_validation)[<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&#39;lasso_score&#39;</span>)</span>
+<span id="cb15-11"><a href="modeling.html#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="modeling.html#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MLmetrics)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;MLmetrics&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:base&#39;:
+## 
+##     Recall</code></pre>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="modeling.html#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">LogLoss</span>(lasso_validation<span class="sc">$</span>lasso_score,lasso_validation<span class="sc">$</span>y)</span></code></pre></div>
+<pre><code>## [1] 0.3079782</code></pre>
+<p>Nos dio un error sorprendetemente muy pequeño. Con este modelo logramos realizar un error de 0.41872 y 0.42131 en los datos de test de Kaggle.</p>
+</div>
+</div>
+<div id="xgboosting" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> XGBOOSTING</h2>
+<p>Sin embargo, para ganar el concurso optamos por explorar otros modelos que generalmente tienen mayor potencial de ganar este tipo de concursos: XG boosting.</p>
+<p>En este caso, se eligieron los hiperparametros mediante un tuning manual explorando el comportamiento del error cuando se fijaban todos los hp excepto uno. De esta manera se fijo la profunidad máxima del arbol en 6 y el learning rate en .06.</p>
+<p>Debido a la alta cantidad de variables de las bases de datos (y pues que muchas son poco informativas) el colsample por cada arbol generado es alto: del 70%. De haber tenido solo variables muy informativas pues bajariamos ese porcentaje, sin embargo quicimos explitar la capacidad del modelo de seleccionar por si solo las variables.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="modeling.html#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preparar la base de entrenamiento</span></span>
+<span id="cb20-2"><a href="modeling.html#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(xgboost)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;xgboost&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:plotly&#39;:
+## 
+##     slice</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     slice</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="modeling.html#cb24-1" aria-hidden="true" tabindex="-1"></a>dtrain <span class="ot">&lt;-</span> <span class="fu">xgb.DMatrix</span>(Xa, <span class="at">label =</span> Ya) </span>
+<span id="cb24-2"><a href="modeling.html#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Label es el target</span></span>
+<span id="cb24-3"><a href="modeling.html#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Preparar la base de validación</span></span>
+<span id="cb24-4"><a href="modeling.html#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="modeling.html#cb24-5" aria-hidden="true" tabindex="-1"></a>dtest <span class="ot">&lt;-</span> <span class="fu">xgb.DMatrix</span>(Xb, <span class="at">label =</span> y)</span>
+<span id="cb24-6"><a href="modeling.html#cb24-6" aria-hidden="true" tabindex="-1"></a>watchlist <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">train =</span> dtrain, <span class="at">eval =</span> dtest) </span>
+<span id="cb24-7"><a href="modeling.html#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Para evaluar el performance del modelo</span></span>
+<span id="cb24-8"><a href="modeling.html#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="modeling.html#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="modeling.html#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Entrenamiento del modelo</span></span>
+<span id="cb24-11"><a href="modeling.html#cb24-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-12"><a href="modeling.html#cb24-12" aria-hidden="true" tabindex="-1"></a>param <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">max_depth =</span> <span class="dv">6</span>, <span class="at">learning_rate =</span> <span class="fl">0.06</span>, </span>
+<span id="cb24-13"><a href="modeling.html#cb24-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">objective =</span> <span class="st">&quot;binary:logistic&quot;</span>,</span>
+<span id="cb24-14"><a href="modeling.html#cb24-14" aria-hidden="true" tabindex="-1"></a>              <span class="at">eval_metric =</span> <span class="st">&quot;logloss&quot;</span>, <span class="at">subsample =</span> <span class="fl">0.6</span>, <span class="at">colsample_bytree =</span> <span class="fl">0.7</span>)</span>
+<span id="cb24-15"><a href="modeling.html#cb24-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-16"><a href="modeling.html#cb24-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-17"><a href="modeling.html#cb24-17" aria-hidden="true" tabindex="-1"></a>xgb_model <span class="ot">&lt;-</span> <span class="fu">xgb.train</span>(<span class="at">params =</span> param, dtrain, </span>
+<span id="cb24-18"><a href="modeling.html#cb24-18" aria-hidden="true" tabindex="-1"></a>                       <span class="at">early_stopping_rounds =</span>  <span class="dv">10</span>, </span>
+<span id="cb24-19"><a href="modeling.html#cb24-19" aria-hidden="true" tabindex="-1"></a>                       <span class="at">nrounds =</span> <span class="dv">300</span>,</span>
+<span id="cb24-20"><a href="modeling.html#cb24-20" aria-hidden="true" tabindex="-1"></a>                 watchlist)</span></code></pre></div>
+<pre><code>## [1]  train-logloss:0.661126  eval-logloss:0.661290 
+## Multiple eval metrics are present. Will use eval_logloss for early stopping.
+## Will train until eval_logloss hasn&#39;t improved in 10 rounds.
+## 
+## [2]  train-logloss:0.633231  eval-logloss:0.633172 
+## [3]  train-logloss:0.607968  eval-logloss:0.607971 
+## [4]  train-logloss:0.585377  eval-logloss:0.585257 
+## [5]  train-logloss:0.564903  eval-logloss:0.564549 
+## [6]  train-logloss:0.548370  eval-logloss:0.547907 
+## [7]  train-logloss:0.532065  eval-logloss:0.531632 
+## [8]  train-logloss:0.516597  eval-logloss:0.516088 
+## [9]  train-logloss:0.503581  eval-logloss:0.503086 
+## [10] train-logloss:0.491568  eval-logloss:0.490988 
+## [11] train-logloss:0.477888  eval-logloss:0.477429 
+## [12] train-logloss:0.467147  eval-logloss:0.466648 
+## [13] train-logloss:0.458369  eval-logloss:0.457845 
+## [14] train-logloss:0.447752  eval-logloss:0.447146 
+## [15] train-logloss:0.437190  eval-logloss:0.436739 
+## [16] train-logloss:0.427902  eval-logloss:0.427458 
+## [17] train-logloss:0.421164  eval-logloss:0.420661 
+## [18] train-logloss:0.414854  eval-logloss:0.414284 
+## [19] train-logloss:0.406952  eval-logloss:0.406353 
+## [20] train-logloss:0.399499  eval-logloss:0.398982 
+## [21] train-logloss:0.393575  eval-logloss:0.393009 
+## [22] train-logloss:0.388775  eval-logloss:0.388227 
+## [23] train-logloss:0.382531  eval-logloss:0.381928 
+## [24] train-logloss:0.377167  eval-logloss:0.376684 
+## [25] train-logloss:0.372310  eval-logloss:0.371952 
+## [26] train-logloss:0.368713  eval-logloss:0.368232 
+## [27] train-logloss:0.364642  eval-logloss:0.364151 
+## [28] train-logloss:0.361578  eval-logloss:0.361061 
+## [29] train-logloss:0.357005  eval-logloss:0.356515 
+## [30] train-logloss:0.354167  eval-logloss:0.353682 
+## [31] train-logloss:0.351240  eval-logloss:0.350763 
+## [32] train-logloss:0.347753  eval-logloss:0.347392 
+## [33] train-logloss:0.342930  eval-logloss:0.342696 
+## [34] train-logloss:0.339237  eval-logloss:0.338993 
+## [35] train-logloss:0.336474  eval-logloss:0.336195 
+## [36] train-logloss:0.334657  eval-logloss:0.334449 
+## [37] train-logloss:0.332689  eval-logloss:0.332532 
+## [38] train-logloss:0.329575  eval-logloss:0.329601 
+## [39] train-logloss:0.327522  eval-logloss:0.327603 
+## [40] train-logloss:0.325327  eval-logloss:0.325409 
+## [41] train-logloss:0.323664  eval-logloss:0.323906 
+## [42] train-logloss:0.320963  eval-logloss:0.321163 
+## [43] train-logloss:0.318701  eval-logloss:0.319025 
+## [44] train-logloss:0.317154  eval-logloss:0.317435 
+## [45] train-logloss:0.315915  eval-logloss:0.316161 
+## [46] train-logloss:0.313681  eval-logloss:0.313951 
+## [47] train-logloss:0.311841  eval-logloss:0.312160 
+## [48] train-logloss:0.310537  eval-logloss:0.310874 
+## [49] train-logloss:0.308272  eval-logloss:0.308666 
+## [50] train-logloss:0.306960  eval-logloss:0.307392 
+## [51] train-logloss:0.305617  eval-logloss:0.306124 
+## [52] train-logloss:0.304651  eval-logloss:0.305219 
+## [53] train-logloss:0.303150  eval-logloss:0.303775 
+## [54] train-logloss:0.302002  eval-logloss:0.302679 
+## [55] train-logloss:0.300560  eval-logloss:0.301315 
+## [56] train-logloss:0.299771  eval-logloss:0.300580 
+## [57] train-logloss:0.298658  eval-logloss:0.299494 
+## [58] train-logloss:0.297638  eval-logloss:0.298431 
+## [59] train-logloss:0.296941  eval-logloss:0.297746 
+## [60] train-logloss:0.295331  eval-logloss:0.296192 
+## [61] train-logloss:0.294501  eval-logloss:0.295385 
+## [62] train-logloss:0.293787  eval-logloss:0.294727 
+## [63] train-logloss:0.292908  eval-logloss:0.293870 
+## [64] train-logloss:0.291310  eval-logloss:0.292313 
+## [65] train-logloss:0.290722  eval-logloss:0.291701 
+## [66] train-logloss:0.290166  eval-logloss:0.291167 
+## [67] train-logloss:0.289431  eval-logloss:0.290470 
+## [68] train-logloss:0.288713  eval-logloss:0.289840 
+## [69] train-logloss:0.287995  eval-logloss:0.289198 
+## [70] train-logloss:0.287229  eval-logloss:0.288457 
+## [71] train-logloss:0.286697  eval-logloss:0.287925 
+## [72] train-logloss:0.286294  eval-logloss:0.287567 
+## [73] train-logloss:0.285455  eval-logloss:0.286788 
+## [74] train-logloss:0.284674  eval-logloss:0.286143 
+## [75] train-logloss:0.284171  eval-logloss:0.285645 
+## [76] train-logloss:0.283340  eval-logloss:0.284832 
+## [77] train-logloss:0.282914  eval-logloss:0.284492 
+## [78] train-logloss:0.281889  eval-logloss:0.283639 
+## [79] train-logloss:0.281391  eval-logloss:0.283165 
+## [80] train-logloss:0.280639  eval-logloss:0.282432 
+## [81] train-logloss:0.279928  eval-logloss:0.281787 
+## [82] train-logloss:0.279075  eval-logloss:0.281033 
+## [83] train-logloss:0.278711  eval-logloss:0.280728 
+## [84] train-logloss:0.278267  eval-logloss:0.280322 
+## [85] train-logloss:0.277945  eval-logloss:0.280035 
+## [86] train-logloss:0.277669  eval-logloss:0.279760 
+## [87] train-logloss:0.277379  eval-logloss:0.279460 
+## [88] train-logloss:0.276993  eval-logloss:0.279092 
+## [89] train-logloss:0.276437  eval-logloss:0.278533 
+## [90] train-logloss:0.276153  eval-logloss:0.278289 
+## [91] train-logloss:0.275509  eval-logloss:0.277802 
+## [92] train-logloss:0.275200  eval-logloss:0.277603 
+## [93] train-logloss:0.274869  eval-logloss:0.277277 
+## [94] train-logloss:0.274432  eval-logloss:0.276912 
+## [95] train-logloss:0.274129  eval-logloss:0.276637 
+## [96] train-logloss:0.273893  eval-logloss:0.276451 
+## [97] train-logloss:0.272634  eval-logloss:0.275314 
+## [98] train-logloss:0.272315  eval-logloss:0.275097 
+## [99] train-logloss:0.272031  eval-logloss:0.274841 
+## [100]    train-logloss:0.271797  eval-logloss:0.274690 
+## [101]    train-logloss:0.271332  eval-logloss:0.274259 
+## [102]    train-logloss:0.270691  eval-logloss:0.273673 
+## [103]    train-logloss:0.270449  eval-logloss:0.273463 
+## [104]    train-logloss:0.269993  eval-logloss:0.273082 
+## [105]    train-logloss:0.269671  eval-logloss:0.272842 
+## [106]    train-logloss:0.269237  eval-logloss:0.272431 
+## [107]    train-logloss:0.268992  eval-logloss:0.272254 
+## [108]    train-logloss:0.268296  eval-logloss:0.271656 
+## [109]    train-logloss:0.268071  eval-logloss:0.271497 
+## [110]    train-logloss:0.267862  eval-logloss:0.271313 
+## [111]    train-logloss:0.267088  eval-logloss:0.270609 
+## [112]    train-logloss:0.266810  eval-logloss:0.270390 
+## [113]    train-logloss:0.266474  eval-logloss:0.270057 
+## [114]    train-logloss:0.266262  eval-logloss:0.269872 
+## [115]    train-logloss:0.265934  eval-logloss:0.269627 
+## [116]    train-logloss:0.265774  eval-logloss:0.269453 
+## [117]    train-logloss:0.265309  eval-logloss:0.269009 
+## [118]    train-logloss:0.265035  eval-logloss:0.268822 
+## [119]    train-logloss:0.264851  eval-logloss:0.268664 
+## [120]    train-logloss:0.264699  eval-logloss:0.268495 
+## [121]    train-logloss:0.264373  eval-logloss:0.268215 
+## [122]    train-logloss:0.264044  eval-logloss:0.268005 
+## [123]    train-logloss:0.263657  eval-logloss:0.267742 
+## [124]    train-logloss:0.263285  eval-logloss:0.267382 
+## [125]    train-logloss:0.263114  eval-logloss:0.267241 
+## [126]    train-logloss:0.262274  eval-logloss:0.266481 
+## [127]    train-logloss:0.262067  eval-logloss:0.266312 
+## [128]    train-logloss:0.261825  eval-logloss:0.266147 
+## [129]    train-logloss:0.261614  eval-logloss:0.265973 
+## [130]    train-logloss:0.261392  eval-logloss:0.265785 
+## [131]    train-logloss:0.261187  eval-logloss:0.265648 
+## [132]    train-logloss:0.260863  eval-logloss:0.265376 
+## [133]    train-logloss:0.260672  eval-logloss:0.265188 
+## [134]    train-logloss:0.260456  eval-logloss:0.265000 
+## [135]    train-logloss:0.260053  eval-logloss:0.264656 
+## [136]    train-logloss:0.259880  eval-logloss:0.264508 
+## [137]    train-logloss:0.259681  eval-logloss:0.264393 
+## [138]    train-logloss:0.259283  eval-logloss:0.264113 
+## [139]    train-logloss:0.259048  eval-logloss:0.263963 
+## [140]    train-logloss:0.258827  eval-logloss:0.263773 
+## [141]    train-logloss:0.258724  eval-logloss:0.263696 
+## [142]    train-logloss:0.258566  eval-logloss:0.263539 
+## [143]    train-logloss:0.258411  eval-logloss:0.263435 
+## [144]    train-logloss:0.258166  eval-logloss:0.263267 
+## [145]    train-logloss:0.257955  eval-logloss:0.263093 
+## [146]    train-logloss:0.257599  eval-logloss:0.262819 
+## [147]    train-logloss:0.257461  eval-logloss:0.262703 
+## [148]    train-logloss:0.257054  eval-logloss:0.262379 
+## [149]    train-logloss:0.256810  eval-logloss:0.262130 
+## [150]    train-logloss:0.256599  eval-logloss:0.262007 
+## [151]    train-logloss:0.256465  eval-logloss:0.261927 
+## [152]    train-logloss:0.256349  eval-logloss:0.261836 
+## [153]    train-logloss:0.256053  eval-logloss:0.261648 
+## [154]    train-logloss:0.255675  eval-logloss:0.261313 
+## [155]    train-logloss:0.255579  eval-logloss:0.261235 
+## [156]    train-logloss:0.255348  eval-logloss:0.261074 
+## [157]    train-logloss:0.255136  eval-logloss:0.260921 
+## [158]    train-logloss:0.254460  eval-logloss:0.260376 
+## [159]    train-logloss:0.254303  eval-logloss:0.260261 
+## [160]    train-logloss:0.254109  eval-logloss:0.260095 
+## [161]    train-logloss:0.253921  eval-logloss:0.260007 
+## [162]    train-logloss:0.253716  eval-logloss:0.259925 
+## [163]    train-logloss:0.253631  eval-logloss:0.259835 
+## [164]    train-logloss:0.253509  eval-logloss:0.259752 
+## [165]    train-logloss:0.253373  eval-logloss:0.259682 
+## [166]    train-logloss:0.253272  eval-logloss:0.259615 
+## [167]    train-logloss:0.253169  eval-logloss:0.259545 
+## [168]    train-logloss:0.253007  eval-logloss:0.259435 
+## [169]    train-logloss:0.252907  eval-logloss:0.259380 
+## [170]    train-logloss:0.252799  eval-logloss:0.259302 
+## [171]    train-logloss:0.252720  eval-logloss:0.259232 
+## [172]    train-logloss:0.252447  eval-logloss:0.259042 
+## [173]    train-logloss:0.252187  eval-logloss:0.258918 
+## [174]    train-logloss:0.251946  eval-logloss:0.258730 
+## [175]    train-logloss:0.251849  eval-logloss:0.258668 
+## [176]    train-logloss:0.251748  eval-logloss:0.258613 
+## [177]    train-logloss:0.251652  eval-logloss:0.258561 
+## [178]    train-logloss:0.251499  eval-logloss:0.258481 
+## [179]    train-logloss:0.251304  eval-logloss:0.258313 
+## [180]    train-logloss:0.250837  eval-logloss:0.257922 
+## [181]    train-logloss:0.250667  eval-logloss:0.257822 
+## [182]    train-logloss:0.250445  eval-logloss:0.257721 
+## [183]    train-logloss:0.250308  eval-logloss:0.257614 
+## [184]    train-logloss:0.250228  eval-logloss:0.257526 
+## [185]    train-logloss:0.249798  eval-logloss:0.257198 
+## [186]    train-logloss:0.249378  eval-logloss:0.256864 
+## [187]    train-logloss:0.249219  eval-logloss:0.256763 
+## [188]    train-logloss:0.249156  eval-logloss:0.256723 
+## [189]    train-logloss:0.249038  eval-logloss:0.256637 
+## [190]    train-logloss:0.248938  eval-logloss:0.256592 
+## [191]    train-logloss:0.248811  eval-logloss:0.256535 
+## [192]    train-logloss:0.248679  eval-logloss:0.256490 
+## [193]    train-logloss:0.248513  eval-logloss:0.256431 
+## [194]    train-logloss:0.248407  eval-logloss:0.256368 
+## [195]    train-logloss:0.248249  eval-logloss:0.256277 
+## [196]    train-logloss:0.248160  eval-logloss:0.256196 
+## [197]    train-logloss:0.247971  eval-logloss:0.256032 
+## [198]    train-logloss:0.247822  eval-logloss:0.255901 
+## [199]    train-logloss:0.247705  eval-logloss:0.255838 
+## [200]    train-logloss:0.247609  eval-logloss:0.255762 
+## [201]    train-logloss:0.247535  eval-logloss:0.255739 
+## [202]    train-logloss:0.247441  eval-logloss:0.255685 
+## [203]    train-logloss:0.247240  eval-logloss:0.255524 
+## [204]    train-logloss:0.247131  eval-logloss:0.255436 
+## [205]    train-logloss:0.246988  eval-logloss:0.255323 
+## [206]    train-logloss:0.246785  eval-logloss:0.255198 
+## [207]    train-logloss:0.246654  eval-logloss:0.255142 
+## [208]    train-logloss:0.246446  eval-logloss:0.254996 
+## [209]    train-logloss:0.246348  eval-logloss:0.254931 
+## [210]    train-logloss:0.246165  eval-logloss:0.254786 
+## [211]    train-logloss:0.246066  eval-logloss:0.254720 
+## [212]    train-logloss:0.245736  eval-logloss:0.254513 
+## [213]    train-logloss:0.245664  eval-logloss:0.254461 
+## [214]    train-logloss:0.245561  eval-logloss:0.254392 
+## [215]    train-logloss:0.245443  eval-logloss:0.254317 
+## [216]    train-logloss:0.245350  eval-logloss:0.254269 
+## [217]    train-logloss:0.245291  eval-logloss:0.254218 
+## [218]    train-logloss:0.245140  eval-logloss:0.254094 
+## [219]    train-logloss:0.245043  eval-logloss:0.254024 
+## [220]    train-logloss:0.244958  eval-logloss:0.253995 
+## [221]    train-logloss:0.244816  eval-logloss:0.253876 
+## [222]    train-logloss:0.244724  eval-logloss:0.253781 
+## [223]    train-logloss:0.244631  eval-logloss:0.253751 
+## [224]    train-logloss:0.244537  eval-logloss:0.253714 
+## [225]    train-logloss:0.244319  eval-logloss:0.253570 
+## [226]    train-logloss:0.244271  eval-logloss:0.253525 
+## [227]    train-logloss:0.244172  eval-logloss:0.253476 
+## [228]    train-logloss:0.243901  eval-logloss:0.253316 
+## [229]    train-logloss:0.243468  eval-logloss:0.252916 
+## [230]    train-logloss:0.243359  eval-logloss:0.252854 
+## [231]    train-logloss:0.243128  eval-logloss:0.252656 
+## [232]    train-logloss:0.243014  eval-logloss:0.252604 
+## [233]    train-logloss:0.242899  eval-logloss:0.252531 
+## [234]    train-logloss:0.242803  eval-logloss:0.252462 
+## [235]    train-logloss:0.242729  eval-logloss:0.252427 
+## [236]    train-logloss:0.242608  eval-logloss:0.252370 
+## [237]    train-logloss:0.242505  eval-logloss:0.252246 
+## [238]    train-logloss:0.242442  eval-logloss:0.252237 
+## [239]    train-logloss:0.242388  eval-logloss:0.252198 
+## [240]    train-logloss:0.242301  eval-logloss:0.252162 
+## [241]    train-logloss:0.242122  eval-logloss:0.252029 
+## [242]    train-logloss:0.242017  eval-logloss:0.251973 
+## [243]    train-logloss:0.241912  eval-logloss:0.251963 
+## [244]    train-logloss:0.241832  eval-logloss:0.251919 
+## [245]    train-logloss:0.241757  eval-logloss:0.251886 
+## [246]    train-logloss:0.241623  eval-logloss:0.251735 
+## [247]    train-logloss:0.241422  eval-logloss:0.251580 
+## [248]    train-logloss:0.241294  eval-logloss:0.251530 
+## [249]    train-logloss:0.241198  eval-logloss:0.251479 
+## [250]    train-logloss:0.241083  eval-logloss:0.251455 
+## [251]    train-logloss:0.241011  eval-logloss:0.251452 
+## [252]    train-logloss:0.240952  eval-logloss:0.251435 
+## [253]    train-logloss:0.240864  eval-logloss:0.251411 
+## [254]    train-logloss:0.240798  eval-logloss:0.251365 
+## [255]    train-logloss:0.240726  eval-logloss:0.251334 
+## [256]    train-logloss:0.240644  eval-logloss:0.251325 
+## [257]    train-logloss:0.240581  eval-logloss:0.251282 
+## [258]    train-logloss:0.240530  eval-logloss:0.251265 
+## [259]    train-logloss:0.240439  eval-logloss:0.251249 
+## [260]    train-logloss:0.240344  eval-logloss:0.251190 
+## [261]    train-logloss:0.240243  eval-logloss:0.251130 
+## [262]    train-logloss:0.240180  eval-logloss:0.251085 
+## [263]    train-logloss:0.240051  eval-logloss:0.251027 
+## [264]    train-logloss:0.239997  eval-logloss:0.250988 
+## [265]    train-logloss:0.239946  eval-logloss:0.250946 
+## [266]    train-logloss:0.239896  eval-logloss:0.250938 
+## [267]    train-logloss:0.239820  eval-logloss:0.250942 
+## [268]    train-logloss:0.239737  eval-logloss:0.250919 
+## [269]    train-logloss:0.239605  eval-logloss:0.250850 
+## [270]    train-logloss:0.239430  eval-logloss:0.250766 
+## [271]    train-logloss:0.239347  eval-logloss:0.250700 
+## [272]    train-logloss:0.239209  eval-logloss:0.250536 
+## [273]    train-logloss:0.239145  eval-logloss:0.250500 
+## [274]    train-logloss:0.239077  eval-logloss:0.250475 
+## [275]    train-logloss:0.238913  eval-logloss:0.250437 
+## [276]    train-logloss:0.238818  eval-logloss:0.250377 
+## [277]    train-logloss:0.238773  eval-logloss:0.250296 
+## [278]    train-logloss:0.238610  eval-logloss:0.250191 
+## [279]    train-logloss:0.238536  eval-logloss:0.250150 
+## [280]    train-logloss:0.238387  eval-logloss:0.250089 
+## [281]    train-logloss:0.238253  eval-logloss:0.249994 
+## [282]    train-logloss:0.238192  eval-logloss:0.249965 
+## [283]    train-logloss:0.238129  eval-logloss:0.249915 
+## [284]    train-logloss:0.237912  eval-logloss:0.249700 
+## [285]    train-logloss:0.237826  eval-logloss:0.249651 
+## [286]    train-logloss:0.237748  eval-logloss:0.249606 
+## [287]    train-logloss:0.237627  eval-logloss:0.249539 
+## [288]    train-logloss:0.237560  eval-logloss:0.249467 
+## [289]    train-logloss:0.237396  eval-logloss:0.249404 
+## [290]    train-logloss:0.237302  eval-logloss:0.249388 
+## [291]    train-logloss:0.237185  eval-logloss:0.249319 
+## [292]    train-logloss:0.236925  eval-logloss:0.249084 
+## [293]    train-logloss:0.236772  eval-logloss:0.248994 
+## [294]    train-logloss:0.236700  eval-logloss:0.248941 
+## [295]    train-logloss:0.236631  eval-logloss:0.248927 
+## [296]    train-logloss:0.236567  eval-logloss:0.248899 
+## [297]    train-logloss:0.236526  eval-logloss:0.248872 
+## [298]    train-logloss:0.236235  eval-logloss:0.248733 
+## [299]    train-logloss:0.236032  eval-logloss:0.248620 
+## [300]    train-logloss:0.235962  eval-logloss:0.248576</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="modeling.html#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Predicción</span></span>
+<span id="cb26-2"><a href="modeling.html#cb26-2" aria-hidden="true" tabindex="-1"></a>xgb_pred <span class="ot">&lt;-</span> <span class="fu">predict</span>(xgb_model, Xb)</span>
+<span id="cb26-3"><a href="modeling.html#cb26-3" aria-hidden="true" tabindex="-1"></a>XGpred<span class="ot">&lt;-</span><span class="fu">data.frame</span>(y, xgb_pred)</span>
+<span id="cb26-4"><a href="modeling.html#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(XGpred)<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="st">&quot;y&quot;</span>,<span class="st">&quot;xgb_pred&quot;</span>)</span></code></pre></div>
+<p>Se muestran las evaluaciones del modelo, tanto in sample como out of sample, para las primeras y últimas iteraciones.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="modeling.html#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">LogLoss</span>(XGpred<span class="sc">$</span>xgb_pred,XGpred<span class="sc">$</span>y)</span></code></pre></div>
+<pre><code>## [1] 0.2485761</code></pre>
+<p>Este modelo logró ganar el concurso con un error en los datasets de kaggle de 0.37598 y 0.37401.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="preparación-de-los-datos.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="conclusiones.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["final_bookdown.pdf", "final_bookdown.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
